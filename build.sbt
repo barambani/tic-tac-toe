@@ -4,9 +4,10 @@ lazy val commonSettings = Seq (
 
 lazy val fpInScala = (project in file(".")).settings(commonSettings: _*)
 
-//initialCommands in console := """
-//  |import Turtle._
-//""".stripMargin
+initialCommands in console := """
+  |import Api._
+  |import Algebra._
+""".stripMargin
 
 scalacOptions ++= Seq (
   "-feature",
@@ -15,7 +16,7 @@ scalacOptions ++= Seq (
 )
 
 libraryDependencies ++= Seq(
-  "org.scalaz" %% "scalaz-core" % "7.2.8",
+  "org.scalaz" %% "scalaz-core" % "7.2.8"
 )
 
 logLevel := Level.Info
