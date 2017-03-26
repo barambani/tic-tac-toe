@@ -2,12 +2,12 @@ lazy val commonSettings = Seq (
   scalaVersion := "2.12.1"
 )
 
-lazy val fpInScala = (project in file(".")).settings(commonSettings: _*)
+lazy val `tic-tac-toe` = (project in file(".")).settings(commonSettings: _*)
 
-initialCommands in console := """
-  |import Api._
-  |import Algebra._
-""".stripMargin
+initialCommands := """
+  import Api._
+  import Algebra._
+"""
 
 scalacOptions ++= Seq (
   "-feature",
