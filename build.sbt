@@ -5,7 +5,7 @@ lazy val commonSettings = Seq (
 lazy val `tic-tac-toe` = (project in file(".")).settings(commonSettings: _*)
 
 initialCommands := """
-  import Api._
+  import TicTacToeApi._
   import Algebra._
 """
 

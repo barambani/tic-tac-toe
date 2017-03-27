@@ -60,9 +60,9 @@ object Move {
       Board.createNew[S1, M1](s1)(_, Taken(e.t, p) :: b.h)
     }
 
-  private def takeIfAvailable[A](xs: Set[A], a: A)(f: (A, Set[A]) => Set[A]): \/[String, Set[A]] =
+  private def takeIfAvailable[A](xs: Set[Empty[A]], a: Empty[A])(f: (Empty[A], Set[Empty[A]]) => Set[Empty[A]]): \/[String, Set[Empty[A]]] =
     xs contains a match {
       case true   => \/-(f(a, xs))
-      case false  => -\/(s"Tile $a already taken")
+      case false  => -\/(s"${ a.t } already taken")
     }
 }

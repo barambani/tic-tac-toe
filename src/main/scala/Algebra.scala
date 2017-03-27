@@ -16,9 +16,9 @@ object Algebra {
   final case class Full()       extends Moves { val taken: Int = 9 }
 
   
-  sealed trait Player extends Product with Serializable
-  final case class X() extends Player
-  final case class O() extends Player
+  sealed trait Player extends Product with Serializable { def print: String }
+  final case class X() extends Player { def print: String = "X" }
+  final case class O() extends Player { def print: String = "O" }
 
   
   sealed trait Tile extends Product with Serializable
@@ -66,10 +66,15 @@ object Algebra {
 
     def print: String =
       s"""
-        Status $s
-        Empty $es
-        Taken $h
+        ${ printPlayerAt(Tile11) }  ${ printPlayerAt(Tile12) }  ${ printPlayerAt(Tile13) }
+        ${ printPlayerAt(Tile21) }  ${ printPlayerAt(Tile22) }  ${ printPlayerAt(Tile23) }
+        ${ printPlayerAt(Tile31) }  ${ printPlayerAt(Tile32) }  ${ printPlayerAt(Tile33) }
+
+        Status: $s
       """
+
+    private def printPlayerAt(t: Tile): String =
+      playerAt(t).fold("_"){ _.print }
   }
   
   object Board {
@@ -88,7 +93,7 @@ object Algebra {
             val h   = nH
           })
         case false => -\/(s"Inconsistent state: $nS doesn't match with the taken positions $nH")
-    }
+      }
 
     def createPrev[S[_], S1[_], M, M1](b: Board[S, M])(implicit P: Previous[S, S1, M, M1]): Board[S1, M1] = new Board[S1, M1] {
       val s = P.getPrevious
