@@ -43,35 +43,28 @@ object Algebra {
   final case class Draw()
 
   
-  sealed trait Status[M] extends Product with Serializable { 
-    val m: M   
-    def moves: Int = this.m match {
-      case m: Moves => m.taken
-      case _        => 10
-    }
-  }
-  final case class NotStarted[M](m: M)     extends Status[M]
-  final case class InPlay[M](m: M)         extends Status[M]
-  final case class MayBeFinished[M](m: M)  extends Status[M]
-  final case class Finished[M](m: M)       extends Status[M]
+  sealed trait Status extends Product with Serializable
+  final case class NotStarted()     extends Status
+  final case class InPlay()         extends Status
+  final case class MayBeFinished()  extends Status
+  final case class Finished ()      extends Status
 
 
-  sealed trait Board[S[_], M] {
-    val s: S[M]
+  sealed trait Board[S, M] {
+    val s: S
+    val m: M
     val es: Set[Empty[Tile]]
     val h: List[Taken[Tile, Player]]
 
     def playerAt(t: Tile): Option[Player] =
       h find { _.t == t } map { _.p }
 
-    def print: String =
-      s"""
-        ${ printPlayerAt(Tile11) }  ${ printPlayerAt(Tile12) }  ${ printPlayerAt(Tile13) }
-        ${ printPlayerAt(Tile21) }  ${ printPlayerAt(Tile22) }  ${ printPlayerAt(Tile23) }
-        ${ printPlayerAt(Tile31) }  ${ printPlayerAt(Tile32) }  ${ printPlayerAt(Tile33) }
+    override def toString: String = s"""
+      ${ printPlayerAt(Tile11) }  ${ printPlayerAt(Tile12) }  ${ printPlayerAt(Tile13) }
+      ${ printPlayerAt(Tile21) }  ${ printPlayerAt(Tile22) }  ${ printPlayerAt(Tile23) }
+      ${ printPlayerAt(Tile31) }  ${ printPlayerAt(Tile32) }  ${ printPlayerAt(Tile33) }
 
-        Status: $s
-      """
+      Status: $s with $m"""
 
     private def printPlayerAt(t: Tile): String =
       playerAt(t).fold("_"){ _.print }
@@ -80,23 +73,26 @@ object Algebra {
   object Board {
 
     lazy val empty: Board[NotStarted, NoMoves] = new Board[NotStarted, NoMoves]{
-      val s   = NotStarted(NoMoves())
-      val es  = Set(Tile11, Tile12, Tile13, Tile21, Tile22, Tile23, Tile31, Tile32, Tile33) map (Empty(_))
+      val s   = NotStarted()
+      val m   = NoMoves()
+      val es  = Set(Tile11, Tile12, Tile13, Tile21, Tile22, Tile23, Tile31, Tile32, Tile33) map Empty.apply
       val h   = Nil
     }
 
-    def createNew[S[_] <: Status[_], M <: Moves](nS: S[M])(nEs: Set[Empty[Tile]], nH: List[Taken[Tile, Player]]): \/[String, Board[S, M]] = 
-      nH.size == nS.moves match { // TODO: Check also the Status
+    def createNew[S <: Status, M <: Moves](nS: S, nM: M)(nEs: Set[Empty[Tile]], nH: List[Taken[Tile, Player]]): \/[String, Board[S, M]] = 
+      nH.size == nM.taken match { // TODO: Check also the Status
         case true => \/-(new Board[S, M] {
             val s   = nS
+            val m   = nM
             val es  = nEs
             val h   = nH
           })
-        case false => -\/(s"Inconsistent state: $nS doesn't match with the taken positions $nH")
+        case false => -\/(s"Inconsistent state: $nM doesn't match with the taken positions $nH")
       }
 
-    def createPrev[S[_], S1[_], M, M1](b: Board[S, M])(implicit P: Previous[S, S1, M, M1]): Board[S1, M1] = new Board[S1, M1] {
-      val s = P.getPrevious
+    def createPrev[S, M, S1, M1](b: Board[S, M])(prevS: S1, prevM: M1): Board[S1, M1] = new Board[S1, M1] {
+      val s = prevS
+      val m = prevM
       val es = b.es + Empty(b.h.head.t)
       val h = b.h.tail
     }
