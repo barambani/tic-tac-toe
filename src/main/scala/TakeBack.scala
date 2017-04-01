@@ -14,7 +14,7 @@ object TakeBack {
 
   def apply[S <: Status, M <: Moves](implicit INST: TakeBack[S, M]): Aux[S, M, INST.NewS, INST.NewM] = INST
 
-  implicit lazy val takeBack1: Aux[InPlay, OneMove, NotStarted, NoMoves] = 
+  implicit lazy val takeBack1: TakeBack[InPlay, OneMove] = 
     new TakeBack[InPlay, OneMove] {
       type NewS = NotStarted
       type NewM = NoMoves
@@ -23,7 +23,7 @@ object TakeBack {
         Board.createPrev(b)(NotStarted(), NoMoves())
     }
 
-  implicit lazy val takeBack2: Aux[InPlay, TwoMoves, InPlay, OneMove] = 
+  implicit lazy val takeBack2: TakeBack[InPlay, TwoMoves] = 
     new TakeBack[InPlay, TwoMoves] {
       type NewS = InPlay
       type NewM = OneMove
@@ -32,7 +32,7 @@ object TakeBack {
         Board.createPrev(b)(InPlay(), OneMove())
     }
  
-  implicit lazy val takeBack3: Aux[InPlay, ThreeMoves, InPlay, TwoMoves] = 
+  implicit lazy val takeBack3: TakeBack[InPlay, ThreeMoves] = 
     new TakeBack[InPlay, ThreeMoves] {
       type NewS = InPlay
       type NewM = TwoMoves
@@ -41,7 +41,7 @@ object TakeBack {
         Board.createPrev(b)(InPlay(), TwoMoves())
     }
 
-  implicit lazy val takeBack4: Aux[InPlay, FourMoves, InPlay, ThreeMoves] = 
+  implicit lazy val takeBack4: TakeBack[InPlay, FourMoves] = 
     new TakeBack[InPlay, FourMoves] {
       type NewS = InPlay
       type NewM = ThreeMoves
@@ -50,7 +50,7 @@ object TakeBack {
         Board.createPrev(b)(InPlay(), ThreeMoves())
     }
 
-  implicit lazy val takeBack5: Aux[MayBeFinished, FiveMoves, InPlay, FourMoves] = 
+  implicit lazy val takeBack5: TakeBack[MayBeFinished, FiveMoves] = 
     new TakeBack[MayBeFinished, FiveMoves] {
       type NewS = InPlay
       type NewM = FourMoves
@@ -59,7 +59,7 @@ object TakeBack {
         Board.createPrev(b)(InPlay(), FourMoves())
     }
 
-  implicit lazy val takeBack6: Aux[MayBeFinished, SixMoves, MayBeFinished, FiveMoves] = 
+  implicit lazy val takeBack6: TakeBack[MayBeFinished, SixMoves] = 
     new TakeBack[MayBeFinished, SixMoves] {
       type NewS = MayBeFinished
       type NewM = FiveMoves
@@ -68,7 +68,7 @@ object TakeBack {
         Board.createPrev(b)(MayBeFinished(), FiveMoves())
     }
 
-  implicit lazy val takeBack7: Aux[MayBeFinished, SevenMoves, MayBeFinished,  SixMoves] = 
+  implicit lazy val takeBack7: TakeBack[MayBeFinished, SevenMoves] = 
     new TakeBack[MayBeFinished, SevenMoves] {
       type NewS = MayBeFinished
       type NewM = SixMoves
@@ -77,7 +77,7 @@ object TakeBack {
         Board.createPrev(b)(MayBeFinished(), SixMoves())
     }
 
-  implicit lazy val takeBack8: Aux[MayBeFinished, EightMoves, MayBeFinished, SevenMoves] = 
+  implicit lazy val takeBack8: TakeBack[MayBeFinished, EightMoves] = 
     new TakeBack[MayBeFinished, EightMoves] {
       type NewS = MayBeFinished
       type NewM = SevenMoves
@@ -86,7 +86,7 @@ object TakeBack {
         Board.createPrev(b)(MayBeFinished(), SevenMoves())
     }
 
-  implicit lazy val takeBack9: Aux[Finished, Full, MayBeFinished, EightMoves] = 
+  implicit lazy val takeBack9: TakeBack[Finished, Full] = 
     new TakeBack[Finished, Full] {
       type NewS = MayBeFinished
       type NewM = EightMoves

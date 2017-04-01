@@ -11,9 +11,9 @@ object WhoWon {
 
   type Aux[S <: Status, Res] = WhoWon[S] { type R = Res } 
   
-  def apply[S <: Status](implicit INST: WhoWon[S]): Aux [S, INST.R] = INST
+  def apply[S <: Status](implicit INST: WhoWon[S]):  Aux[S, INST.R] = INST
 
-  implicit lazy val whoWon5: Aux[MayBeFinished, \/[PlayAgain, Winner[Player]]] = 
+  implicit lazy val whoWon5: WhoWon[MayBeFinished] = 
     new WhoWon[MayBeFinished] {
       type R = \/[PlayAgain, Winner[Player]]
       
@@ -37,7 +37,7 @@ object WhoWon {
         ((h contains Tile13) && (h contains Tile22) && (h contains Tile31))
     }
   
-  implicit lazy val whoWon9: Aux[Finished, Draw] =
+  implicit lazy val whoWon9: WhoWon[Finished] =
     new WhoWon[Finished] {
       type R = Draw
       def whoWon: Board[Finished, _] => R =

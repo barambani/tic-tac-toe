@@ -15,7 +15,7 @@ object Move {
 
   def apply[S <: Status, M <: Moves](implicit INST: Move[S, M]): Aux[S, M, INST.NewS, INST.NewM] = INST
   
-  implicit lazy val move0: Aux[NotStarted, NoMoves, InPlay, OneMove] = 
+  implicit lazy val move0: Move[NotStarted, NoMoves] = 
     new Move[NotStarted, NoMoves] {
       type NewS = InPlay
       type NewM = OneMove
@@ -24,7 +24,7 @@ object Move {
         b => t => p => newBoard(b)(InPlay(), OneMove())(t, p)
     }
 
-  implicit lazy val move1: Aux[InPlay, OneMove, InPlay, TwoMoves] =
+  implicit lazy val move1: Move[InPlay, OneMove] = 
     new Move[InPlay, OneMove] {
       type NewS = InPlay
       type NewM = TwoMoves
@@ -33,7 +33,7 @@ object Move {
         b => t => p => newBoard(b)(InPlay(), TwoMoves())(t, p)
     }
 
-  implicit lazy val move2: Aux[InPlay, TwoMoves, InPlay, ThreeMoves] =
+  implicit lazy val move2: Move[InPlay, TwoMoves] =
     new Move[InPlay, TwoMoves] {
       type NewS = InPlay
       type NewM = ThreeMoves
@@ -42,7 +42,7 @@ object Move {
         b => t => p => newBoard(b)(InPlay(), ThreeMoves())(t, p)
     }
 
-  implicit lazy val move3: Aux[InPlay, ThreeMoves, InPlay, FourMoves] =
+  implicit lazy val move3: Move[InPlay, ThreeMoves] = 
     new Move[InPlay, ThreeMoves] {
       type NewS = InPlay
       type NewM = FourMoves
@@ -51,7 +51,7 @@ object Move {
         b => t => p => newBoard(b)(InPlay(), FourMoves())(t, p)
     }
 
-  implicit lazy val move4: Aux[InPlay, FourMoves, MayBeFinished, FiveMoves] =
+  implicit lazy val move4: Move[InPlay, FourMoves] = 
     new Move[InPlay, FourMoves] {
       type NewS = MayBeFinished
       type NewM = FiveMoves
@@ -60,7 +60,7 @@ object Move {
         b => t => p => newBoard(b)(MayBeFinished(), FiveMoves())(t, p)
     }
 
-  implicit lazy val move5: Aux[MayBeFinished, FiveMoves, MayBeFinished, SixMoves] =
+  implicit lazy val move5: Move[MayBeFinished, FiveMoves] = 
     new Move[MayBeFinished, FiveMoves] {
       type NewS = MayBeFinished
       type NewM = SixMoves
@@ -69,7 +69,7 @@ object Move {
         b => t => p => newBoard(b)(MayBeFinished(), SixMoves())(t, p)
     }
 
-  implicit lazy val move6: Aux[MayBeFinished, SixMoves, MayBeFinished, SevenMoves] =
+  implicit lazy val move6: Move[MayBeFinished, SixMoves] = 
     new Move[MayBeFinished, SixMoves] {
       type NewS = MayBeFinished
       type NewM = SevenMoves
@@ -78,7 +78,7 @@ object Move {
         b => t => p => newBoard(b)(MayBeFinished(), SevenMoves())(t, p)
     }
 
-  implicit lazy val move7: Aux[MayBeFinished, SevenMoves, MayBeFinished, EightMoves] =
+  implicit lazy val move7: Move[MayBeFinished, SevenMoves] = 
     new Move[MayBeFinished, SevenMoves] {
       type NewS = MayBeFinished
       type NewM = EightMoves
@@ -87,7 +87,7 @@ object Move {
         b => t => p => newBoard(b)(MayBeFinished(), EightMoves())(t, p)
     }
 
-  implicit lazy val movea8: Aux[MayBeFinished, EightMoves, Finished, Full] =
+  implicit lazy val movea8: Move[MayBeFinished, EightMoves] = 
     new Move[MayBeFinished, EightMoves] {
       type NewS = Finished
       type NewM = Full
