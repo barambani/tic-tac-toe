@@ -90,9 +90,9 @@ object Algebra {
         case false => -\/(s"Inconsistent state: $nM doesn't match with the taken positions $nH")
       }
 
-    def createPrev[S, M, S1, M1](b: Board[S, M])(prevS: S1, prevM: M1): Board[S1, M1] = new Board[S1, M1] {
-      val s = prevS
-      val m = prevM
+    def createPrev[S <: Status, M <: Moves](b: Board[S, M])(implicit PRV: Previous[S, M]): Board[PRV.NewS, PRV.NewM] = new Board[PRV.NewS, PRV.NewM] {
+      val s = PRV.s
+      val m = PRV.m
       val es = b.es + Empty(b.h.head.t)
       val h = b.h.tail
     }

@@ -1,97 +1,98 @@
 import Algebra._
 import scala.language.higherKinds
 
-sealed trait TakeBack[S <: Status, M <: Moves] { 
+sealed trait Previous[S <: Status, M <: Moves] { 
   type NewS
   type NewM
 
-  def takeBack(b: Board[S, M]): Board[NewS, NewM]
+  val s: NewS
+  val m: NewM
 }
 
-object TakeBack {
+object Previous {
 
-  type Aux[S <: Status, M <: Moves , S1, M1] = TakeBack[S, M] { type NewS = S1; type NewM = M1 }
+  type Aux[S <: Status, M <: Moves , S1, M1] = Previous[S, M] { type NewS = S1; type NewM = M1 }
 
-  def apply[S <: Status, M <: Moves](implicit INST: TakeBack[S, M]): Aux[S, M, INST.NewS, INST.NewM] = INST
+  def apply[S <: Status, M <: Moves](implicit INST: Previous[S, M]): Aux[S, M, INST.NewS, INST.NewM] = INST
 
-  implicit lazy val takeBack1: TakeBack[InPlay, OneMove] = 
-    new TakeBack[InPlay, OneMove] {
+  implicit lazy val previous1: Previous[InPlay, OneMove] = 
+    new Previous[InPlay, OneMove] {
       type NewS = NotStarted
       type NewM = NoMoves
       
-      def takeBack(b: Board[InPlay, OneMove]): Board[NewS, NewM] =
-        Board.createPrev(b)(NotStarted(), NoMoves())
+      val s = NotStarted()
+      val m = NoMoves()
     }
 
-  implicit lazy val takeBack2: TakeBack[InPlay, TwoMoves] = 
-    new TakeBack[InPlay, TwoMoves] {
+  implicit lazy val previous2: Previous[InPlay, TwoMoves] = 
+    new Previous[InPlay, TwoMoves] {
       type NewS = InPlay
       type NewM = OneMove
       
-      def takeBack(b: Board[InPlay, TwoMoves]): Board[NewS, NewM] =
-        Board.createPrev(b)(InPlay(), OneMove())
+      val s = InPlay()
+      val m = OneMove()
     }
  
-  implicit lazy val takeBack3: TakeBack[InPlay, ThreeMoves] = 
-    new TakeBack[InPlay, ThreeMoves] {
+  implicit lazy val previous3: Previous[InPlay, ThreeMoves] = 
+    new Previous[InPlay, ThreeMoves] {
       type NewS = InPlay
       type NewM = TwoMoves
       
-      def takeBack(b: Board[InPlay, ThreeMoves]): Board[NewS, NewM] =
-        Board.createPrev(b)(InPlay(), TwoMoves())
+      val s = InPlay()
+      val m = TwoMoves()
     }
 
-  implicit lazy val takeBack4: TakeBack[InPlay, FourMoves] = 
-    new TakeBack[InPlay, FourMoves] {
+  implicit lazy val previous4: Previous[InPlay, FourMoves] = 
+    new Previous[InPlay, FourMoves] {
       type NewS = InPlay
       type NewM = ThreeMoves
       
-      def takeBack(b: Board[InPlay, FourMoves]): Board[NewS, NewM] =
-        Board.createPrev(b)(InPlay(), ThreeMoves())
+      val s = InPlay()
+      val m = ThreeMoves()
     }
 
-  implicit lazy val takeBack5: TakeBack[MayBeFinished, FiveMoves] = 
-    new TakeBack[MayBeFinished, FiveMoves] {
+  implicit lazy val previous5: Previous[MayBeFinished, FiveMoves] = 
+    new Previous[MayBeFinished, FiveMoves] {
       type NewS = InPlay
       type NewM = FourMoves
       
-      def takeBack(b: Board[MayBeFinished, FiveMoves]): Board[NewS, NewM] =
-        Board.createPrev(b)(InPlay(), FourMoves())
+      val s = InPlay()
+      val m = FourMoves()
     }
 
-  implicit lazy val takeBack6: TakeBack[MayBeFinished, SixMoves] = 
-    new TakeBack[MayBeFinished, SixMoves] {
+  implicit lazy val previous6: Previous[MayBeFinished, SixMoves] = 
+    new Previous[MayBeFinished, SixMoves] {
       type NewS = MayBeFinished
       type NewM = FiveMoves
       
-      def takeBack(b: Board[MayBeFinished, SixMoves]): Board[NewS, NewM] =
-        Board.createPrev(b)(MayBeFinished(), FiveMoves())
+      val s = MayBeFinished()
+      val m = FiveMoves()
     }
 
-  implicit lazy val takeBack7: TakeBack[MayBeFinished, SevenMoves] = 
-    new TakeBack[MayBeFinished, SevenMoves] {
+  implicit lazy val previous7: Previous[MayBeFinished, SevenMoves] = 
+    new Previous[MayBeFinished, SevenMoves] {
       type NewS = MayBeFinished
       type NewM = SixMoves
       
-      def takeBack(b: Board[MayBeFinished, SevenMoves]): Board[NewS, NewM] =
-        Board.createPrev(b)(MayBeFinished(), SixMoves())
+      val s = MayBeFinished()
+      val m = SixMoves()
     }
 
-  implicit lazy val takeBack8: TakeBack[MayBeFinished, EightMoves] = 
-    new TakeBack[MayBeFinished, EightMoves] {
+  implicit lazy val previous8: Previous[MayBeFinished, EightMoves] = 
+    new Previous[MayBeFinished, EightMoves] {
       type NewS = MayBeFinished
       type NewM = SevenMoves
       
-      def takeBack(b: Board[MayBeFinished, EightMoves]): Board[NewS, NewM] =
-        Board.createPrev(b)(MayBeFinished(), SevenMoves())
+      val s = MayBeFinished()
+      val m = SevenMoves()
     }
 
-  implicit lazy val takeBack9: TakeBack[Finished, Full] = 
-    new TakeBack[Finished, Full] {
+  implicit lazy val previous9: Previous[Finished, Full] = 
+    new Previous[Finished, Full] {
       type NewS = MayBeFinished
       type NewM = EightMoves
       
-      def takeBack(b: Board[Finished, Full]): Board[NewS, NewM] =
-        Board.createPrev(b)(MayBeFinished(), EightMoves())
+      val s = MayBeFinished()
+      val m = EightMoves()
     }
 }

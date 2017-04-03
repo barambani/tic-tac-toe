@@ -22,8 +22,8 @@ object TicTacToeApi {
   def playerAt[S <: Status, M <: Moves](b: Board[S, M], t: Tile): Option[Player] =
     b.playerAt(t)
 
-  def takeBack[S <: Status, M <: Moves](b: Board[S, M])(implicit TB: TakeBack[S, M]): Board[TB.NewS, TB.NewM] =
-    TB.takeBack(b)
+  def takeBack[S <: Status, M <: Moves](b: Board[S, M])(implicit PRV: Previous[S, M]): Board[PRV.NewS, PRV.NewM] =
+    Board.createPrev(b)
 
   def isDraw(b: Board[Finished, Full]): Boolean = true
 
