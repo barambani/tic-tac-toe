@@ -19,9 +19,9 @@ object WhoWon {
       
       def whoWon: Board[MayBeFinished, _] => R =
         b => 
-          if(playerWins(X(), b.h))      \/-(Winner(X()))
-          else if(playerWins(O(), b.h)) \/-(Winner(O()))
-          else                          -\/(PlayAgain())
+          if(playerWins(X, b.h))      \/-(Winner(X))
+          else if(playerWins(O, b.h)) \/-(Winner(O))
+          else                        -\/(PlayAgain)
 
       private def playerWins(p: Player, h: List[Taken[Tile, Player]]): Boolean =
         hasWinningSequence(h filter (_.p == p) map (_.t))
@@ -41,6 +41,6 @@ object WhoWon {
     new WhoWon[Finished] {
       type R = Draw
       def whoWon: Board[Finished, _] => R =
-        _ => Draw()
+        _ => Draw
     }
 }

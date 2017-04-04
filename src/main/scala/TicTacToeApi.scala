@@ -14,7 +14,7 @@ object TicTacToeApi {
     b flatMap (move(_, Empty(t), p))
 
   def move[S <: Status, M <: Moves](b: Board[S, M], e: Empty[Tile], p: Player)(implicit M: Move[S, M]): \/[String, Board[M.NewS, M.NewM]] =
-    M.move(b)(e)(p)
+    Board.tryMoveAt(b)(e, p)
 
   def whoWon[S <: Status](b: Board[S, _])(implicit W: WhoWon[S]): W.R =
     W.whoWon(b)

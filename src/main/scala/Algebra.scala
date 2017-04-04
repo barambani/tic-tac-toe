@@ -16,9 +16,11 @@ object Algebra {
   final case class Full()       extends Moves { val taken: Int = 9 }
 
   
-  sealed trait Player extends Product with Serializable { def print: String }
-  final case class X() extends Player { def print: String = "X" }
-  final case class O() extends Player { def print: String = "O" }
+  sealed trait Player extends Product with Serializable
+  sealed trait X extends Player
+  sealed trait O extends Player
+  final case object X extends X { override def toString: String = "X" }
+  final case object O extends O { override def toString: String = "O" }
 
   
   sealed trait Tile extends Product with Serializable
@@ -39,15 +41,23 @@ object Algebra {
 
   
   final case class Winner[A](p: A)
-  final case class PlayAgain()
-  final case class Draw()
+  
+  sealed trait PlayAgain extends Product with Serializable
+  final case object PlayAgain extends PlayAgain
+
+  sealed trait Draw extends Product with Serializable
+  final case object Draw extends Draw
 
   
   sealed trait Status extends Product with Serializable
-  final case class NotStarted()     extends Status
-  final case class InPlay()         extends Status
-  final case class MayBeFinished()  extends Status
-  final case class Finished ()      extends Status
+  sealed trait NotStarted extends Status
+  sealed trait InPlay extends Status
+  sealed trait MayBeFinished extends Status
+  sealed trait Finished extends Status
+  final case object NotStarted    extends NotStarted
+  final case object InPlay        extends InPlay
+  final case object MayBeFinished extends MayBeFinished
+  final case object Finished      extends Finished
 
 
   sealed trait Board[S, M] {
@@ -67,27 +77,32 @@ object Algebra {
       Status: $s with $m"""
 
     private def printPlayerAt(t: Tile): String =
-      playerAt(t).fold("_"){ _.print }
+      playerAt(t).fold("_"){ _.toString }
   }
   
   object Board {
 
     lazy val empty: Board[NotStarted, NoMoves] = new Board[NotStarted, NoMoves]{
-      val s   = NotStarted()
+      val s   = NotStarted
       val m   = NoMoves()
       val es  = Set(Tile11, Tile12, Tile13, Tile21, Tile22, Tile23, Tile31, Tile32, Tile33) map Empty.apply
       val h   = Nil
     }
 
-    def createNew[S <: Status, M <: Moves](nS: S, nM: M)(nEs: Set[Empty[Tile]], nH: List[Taken[Tile, Player]]): \/[String, Board[S, M]] = 
-      nH.size == nM.taken match { // TODO: Check also the Status
-        case true => \/-(new Board[S, M] {
-            val s   = nS
-            val m   = nM
-            val es  = nEs
-            val h   = nH
-          })
-        case false => -\/(s"Inconsistent state: $nM doesn't match with the taken positions $nH")
+    def tryMoveAt[S <: Status, M <: Moves](b: Board[S, M])(e: Empty[Tile], p: Player)(implicit M: Move[S, M]): \/[String, Board[M.NewS, M.NewM]] = 
+      takeIfAvailable(b.es, e) map {
+        newEmpty => new Board[M.NewS, M.NewM] {
+            val s   = M.s
+            val m   = M.m
+            val es  = newEmpty
+            val h   = Taken(e.t, p) :: b.h
+        }
+      }
+
+    private def takeIfAvailable[A](xs: Set[Empty[A]], a: Empty[A]): \/[String, Set[Empty[A]]] =
+      xs contains a match {
+        case true   => \/-(xs filterNot (_ == a))
+        case false  => -\/(s"${ a.t } already taken")
       }
 
     def createPrev[S <: Status, M <: Moves](b: Board[S, M])(implicit PRV: Previous[S, M]): Board[PRV.NewS, PRV.NewM] = new Board[PRV.NewS, PRV.NewM] {

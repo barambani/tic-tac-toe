@@ -20,7 +20,7 @@ object Previous {
       type NewS = NotStarted
       type NewM = NoMoves
       
-      val s = NotStarted()
+      val s = NotStarted
       val m = NoMoves()
     }
 
@@ -29,7 +29,7 @@ object Previous {
       type NewS = InPlay
       type NewM = OneMove
       
-      val s = InPlay()
+      val s = InPlay
       val m = OneMove()
     }
  
@@ -38,7 +38,7 @@ object Previous {
       type NewS = InPlay
       type NewM = TwoMoves
       
-      val s = InPlay()
+      val s = InPlay
       val m = TwoMoves()
     }
 
@@ -47,7 +47,7 @@ object Previous {
       type NewS = InPlay
       type NewM = ThreeMoves
       
-      val s = InPlay()
+      val s = InPlay
       val m = ThreeMoves()
     }
 
@@ -56,7 +56,7 @@ object Previous {
       type NewS = InPlay
       type NewM = FourMoves
       
-      val s = InPlay()
+      val s = InPlay
       val m = FourMoves()
     }
 
@@ -65,7 +65,7 @@ object Previous {
       type NewS = MayBeFinished
       type NewM = FiveMoves
       
-      val s = MayBeFinished()
+      val s = MayBeFinished
       val m = FiveMoves()
     }
 
@@ -74,7 +74,7 @@ object Previous {
       type NewS = MayBeFinished
       type NewM = SixMoves
       
-      val s = MayBeFinished()
+      val s = MayBeFinished
       val m = SixMoves()
     }
 
@@ -83,7 +83,7 @@ object Previous {
       type NewS = MayBeFinished
       type NewM = SevenMoves
       
-      val s = MayBeFinished()
+      val s = MayBeFinished
       val m = SevenMoves()
     }
 
@@ -92,7 +92,7 @@ object Previous {
       type NewS = MayBeFinished
       type NewM = EightMoves
       
-      val s = MayBeFinished()
+      val s = MayBeFinished
       val m = EightMoves()
     }
 }
