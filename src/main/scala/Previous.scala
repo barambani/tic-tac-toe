@@ -21,7 +21,7 @@ object Previous {
       type NewM = NoMoves
       
       val s = NotStarted
-      val m = NoMoves()
+      val m = NoMoves
     }
 
   implicit lazy val previous2: Previous[InPlay, TwoMoves] = 
@@ -30,7 +30,7 @@ object Previous {
       type NewM = OneMove
       
       val s = InPlay
-      val m = OneMove()
+      val m = OneMove
     }
  
   implicit lazy val previous3: Previous[InPlay, ThreeMoves] = 
@@ -39,7 +39,7 @@ object Previous {
       type NewM = TwoMoves
       
       val s = InPlay
-      val m = TwoMoves()
+      val m = TwoMoves
     }
 
   implicit lazy val previous4: Previous[InPlay, FourMoves] = 
@@ -48,7 +48,7 @@ object Previous {
       type NewM = ThreeMoves
       
       val s = InPlay
-      val m = ThreeMoves()
+      val m = ThreeMoves
     }
 
   implicit lazy val previous5: Previous[MayBeFinished, FiveMoves] = 
@@ -57,7 +57,7 @@ object Previous {
       type NewM = FourMoves
       
       val s = InPlay
-      val m = FourMoves()
+      val m = FourMoves
     }
 
   implicit lazy val previous6: Previous[MayBeFinished, SixMoves] = 
@@ -66,7 +66,7 @@ object Previous {
       type NewM = FiveMoves
       
       val s = MayBeFinished
-      val m = FiveMoves()
+      val m = FiveMoves
     }
 
   implicit lazy val previous7: Previous[MayBeFinished, SevenMoves] = 
@@ -75,7 +75,7 @@ object Previous {
       type NewM = SixMoves
       
       val s = MayBeFinished
-      val m = SixMoves()
+      val m = SixMoves
     }
 
   implicit lazy val previous8: Previous[MayBeFinished, EightMoves] = 
@@ -84,7 +84,7 @@ object Previous {
       type NewM = SevenMoves
       
       val s = MayBeFinished
-      val m = SevenMoves()
+      val m = SevenMoves
     }
 
   implicit lazy val previous9: Previous[Finished, Full] = 
@@ -93,6 +93,6 @@ object Previous {
       type NewM = EightMoves
       
       val s = MayBeFinished
-      val m = EightMoves()
+      val m = EightMoves
     }
 }

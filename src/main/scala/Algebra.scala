@@ -3,17 +3,27 @@ import scala.language.higherKinds
 
 object Algebra {
 
-  sealed trait Moves extends Product with Serializable { val taken: Int }
-  final case class NoMoves()    extends Moves { val taken: Int = 0 }
-  final case class OneMove()    extends Moves { val taken: Int = 1 }
-  final case class TwoMoves()   extends Moves { val taken: Int = 2 }
-  final case class ThreeMoves() extends Moves { val taken: Int = 3 }
-  final case class FourMoves()  extends Moves { val taken: Int = 4 }
-  final case class FiveMoves()  extends Moves { val taken: Int = 5 }
-  final case class SixMoves()   extends Moves { val taken: Int = 6 }
-  final case class SevenMoves() extends Moves { val taken: Int = 7 }
-  final case class EightMoves() extends Moves { val taken: Int = 8 }
-  final case class Full()       extends Moves { val taken: Int = 9 }
+  sealed trait Moves extends Product with Serializable
+  sealed trait NoMoves    extends Moves
+  sealed trait OneMove    extends Moves
+  sealed trait TwoMoves   extends Moves
+  sealed trait ThreeMoves extends Moves
+  sealed trait FourMoves  extends Moves
+  sealed trait FiveMoves  extends Moves
+  sealed trait SixMoves   extends Moves
+  sealed trait SevenMoves extends Moves
+  sealed trait EightMoves extends Moves
+  sealed trait Full       extends Moves
+  final case object NoMoves    extends NoMoves
+  final case object OneMove    extends OneMove
+  final case object TwoMoves   extends TwoMoves
+  final case object ThreeMoves extends ThreeMoves
+  final case object FourMoves  extends FourMoves
+  final case object FiveMoves  extends FiveMoves
+  final case object SixMoves   extends SixMoves
+  final case object SevenMoves extends SevenMoves
+  final case object EightMoves extends EightMoves
+  final case object Full       extends Full
 
   
   sealed trait Player extends Product with Serializable
@@ -84,7 +94,7 @@ object Algebra {
 
     lazy val empty: Board[NotStarted, NoMoves] = new Board[NotStarted, NoMoves]{
       val s   = NotStarted
-      val m   = NoMoves()
+      val m   = NoMoves
       val es  = Set(Tile11, Tile12, Tile13, Tile21, Tile22, Tile23, Tile31, Tile32, Tile33) map Empty.apply
       val h   = Nil
     }

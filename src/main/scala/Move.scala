@@ -22,7 +22,7 @@ object Move {
       type NewM = OneMove
 
       val s = InPlay
-      val m = OneMove()
+      val m = OneMove
     }
 
   implicit lazy val move1: Move[InPlay, OneMove] = 
@@ -31,7 +31,7 @@ object Move {
       type NewM = TwoMoves
 
       val s = InPlay
-      val m = TwoMoves()
+      val m = TwoMoves
     }
 
   implicit lazy val move2: Move[InPlay, TwoMoves] =
@@ -40,7 +40,7 @@ object Move {
       type NewM = ThreeMoves
 
       val s = InPlay
-      val m = ThreeMoves()
+      val m = ThreeMoves
     }
 
   implicit lazy val move3: Move[InPlay, ThreeMoves] = 
@@ -49,7 +49,7 @@ object Move {
       type NewM = FourMoves
 
       val s = InPlay
-      val m = FourMoves()
+      val m = FourMoves
     }
 
   implicit lazy val move4: Move[InPlay, FourMoves] = 
@@ -58,7 +58,7 @@ object Move {
       type NewM = FiveMoves
 
       val s = MayBeFinished
-      val m = FiveMoves()
+      val m = FiveMoves
     }
 
   implicit lazy val move5: Move[MayBeFinished, FiveMoves] = 
@@ -67,7 +67,7 @@ object Move {
       type NewM = SixMoves
 
       val s = MayBeFinished
-      val m = SixMoves()
+      val m = SixMoves
     }
 
   implicit lazy val move6: Move[MayBeFinished, SixMoves] = 
@@ -76,7 +76,7 @@ object Move {
       type NewM = SevenMoves
 
       val s = MayBeFinished
-      val m = SevenMoves()
+      val m = SevenMoves
     }
 
   implicit lazy val move7: Move[MayBeFinished, SevenMoves] = 
@@ -85,7 +85,7 @@ object Move {
       type NewM = EightMoves
 
       val s = MayBeFinished
-      val m = EightMoves()
+      val m = EightMoves
     }
 
   implicit lazy val movea8: Move[MayBeFinished, EightMoves] = 
@@ -94,6 +94,6 @@ object Move {
       type NewM = Full
 
       val s = Finished
-      val m = Full()
+      val m = Full
     }
 }
