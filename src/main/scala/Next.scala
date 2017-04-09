@@ -2,7 +2,7 @@ import Algebra._
 import scalaz.{\/, -\/, \/-}
 import scala.language.higherKinds
 
-sealed trait Move[S <: Status, M <: Moves] {
+sealed trait Next[S <: Status, M <: Moves] {
   type NewS <: Status
   type NewM <: Moves
 
@@ -10,14 +10,14 @@ sealed trait Move[S <: Status, M <: Moves] {
   val m: NewM
 }
 
-object Move {
+object Next {
 
-  type Aux[S <: Status, M <: Moves, S1, M1] = Move[S, M] { type NewS = S1; type NewM = M1 }
+  type Aux[S <: Status, M <: Moves, S1, M1] = Next[S, M] { type NewS = S1; type NewM = M1 }
 
-  def apply[S <: Status, M <: Moves](implicit INST: Move[S, M]): Aux[S, M, INST.NewS, INST.NewM] = INST
+  def apply[S <: Status, M <: Moves](implicit INST: Next[S, M]): Aux[S, M, INST.NewS, INST.NewM] = INST
   
   implicit lazy val move0: Aux[NotStarted, NoMoves, InPlay, OneMove] = 
-    new Move[NotStarted, NoMoves] {
+    new Next[NotStarted, NoMoves] {
       type NewS = InPlay
       type NewM = OneMove
 
@@ -26,7 +26,7 @@ object Move {
     }
 
   implicit lazy val move1: Aux[InPlay, OneMove, InPlay, TwoMoves] = 
-    new Move[InPlay, OneMove] {
+    new Next[InPlay, OneMove] {
       type NewS = InPlay
       type NewM = TwoMoves
 
@@ -35,7 +35,7 @@ object Move {
     }
 
   implicit lazy val move2: Aux[InPlay, TwoMoves, InPlay, ThreeMoves] =
-    new Move[InPlay, TwoMoves] {
+    new Next[InPlay, TwoMoves] {
       type NewS = InPlay
       type NewM = ThreeMoves
 
@@ -44,7 +44,7 @@ object Move {
     }
 
   implicit lazy val move3: Aux[InPlay, ThreeMoves, InPlay, FourMoves] = 
-    new Move[InPlay, ThreeMoves] {
+    new Next[InPlay, ThreeMoves] {
       type NewS = InPlay
       type NewM = FourMoves
 
@@ -53,7 +53,7 @@ object Move {
     }
 
   implicit lazy val move4: Aux[InPlay, FourMoves, MayBeFinished, FiveMoves] = 
-    new Move[InPlay, FourMoves] {
+    new Next[InPlay, FourMoves] {
       type NewS = MayBeFinished
       type NewM = FiveMoves
 
@@ -62,7 +62,7 @@ object Move {
     }
 
   implicit lazy val move5: Aux[MayBeFinished, FiveMoves, MayBeFinished, SixMoves] = 
-    new Move[MayBeFinished, FiveMoves] {
+    new Next[MayBeFinished, FiveMoves] {
       type NewS = MayBeFinished
       type NewM = SixMoves
 
@@ -71,7 +71,7 @@ object Move {
     }
 
   implicit lazy val move6: Aux[MayBeFinished, SixMoves, MayBeFinished, SevenMoves] = 
-    new Move[MayBeFinished, SixMoves] {
+    new Next[MayBeFinished, SixMoves] {
       type NewS = MayBeFinished
       type NewM = SevenMoves
 
@@ -80,7 +80,7 @@ object Move {
     }
 
   implicit lazy val move7: Aux[MayBeFinished, SevenMoves, MayBeFinished, EightMoves] = 
-    new Move[MayBeFinished, SevenMoves] {
+    new Next[MayBeFinished, SevenMoves] {
       type NewS = MayBeFinished
       type NewM = EightMoves
 
@@ -89,7 +89,7 @@ object Move {
     }
 
   implicit lazy val movea8: Aux[MayBeFinished, EightMoves, Finished, Full] = 
-    new Move[MayBeFinished, EightMoves] {
+    new Next[MayBeFinished, EightMoves] {
       type NewS = Finished
       type NewM = Full
 

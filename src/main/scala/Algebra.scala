@@ -99,11 +99,11 @@ object Algebra {
       val h   = Nil
     }
 
-    def tryMoveAt[S <: Status, M <: Moves](b: Board[S, M])(e: Empty[Tile], p: Player)(implicit M: Move[S, M]): \/[String, Board[M.NewS, M.NewM]] = 
+    def tryMoveAt[S <: Status, M <: Moves](b: Board[S, M])(e: Empty[Tile], p: Player)(implicit NXT: Next[S, M]): \/[String, Board[NXT.NewS, NXT.NewM]] = 
       takeIfAvailable(b.es, e) map {
-        newEmpty => new Board[M.NewS, M.NewM] {
-            val s   = M.s
-            val m   = M.m
+        newEmpty => new Board[NXT.NewS, NXT.NewM] {
+            val s   = NXT.s
+            val m   = NXT.m
             val es  = newEmpty
             val h   = Taken(e.t, p) :: b.h
         }

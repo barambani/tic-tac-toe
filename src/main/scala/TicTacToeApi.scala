@@ -7,13 +7,13 @@ object TicTacToeApi {
   def startGame: Board[NotStarted, NoMoves] =
     Board.empty
 
-  def nextMoveFor[S <: Status, M <: Moves](b: Board[S, M])(t: Tile, p: Player)(implicit M: Move[S, M]): \/[String, Board[M.NewS, M.NewM]] =
+  def nextMoveFor[S <: Status, M <: Moves](b: Board[S, M])(t: Tile, p: Player)(implicit NXT: Next[S, M]): \/[String, Board[NXT.NewS, NXT.NewM]] =
     move(b, Empty(t), p)
 
-  def nextMoveFor[S <: Status, M <: Moves](b: \/[String, Board[S, M]])(t: Tile, p: Player)(implicit M: Move[S, M]): \/[String, Board[M.NewS, M.NewM]] =
+  def nextMoveFor[S <: Status, M <: Moves](b: \/[String, Board[S, M]])(t: Tile, p: Player)(implicit NXT: Next[S, M]): \/[String, Board[NXT.NewS, NXT.NewM]] =
     b flatMap (move(_, Empty(t), p))
 
-  def move[S <: Status, M <: Moves](b: Board[S, M], e: Empty[Tile], p: Player)(implicit M: Move[S, M]): \/[String, Board[M.NewS, M.NewM]] =
+  def move[S <: Status, M <: Moves](b: Board[S, M], e: Empty[Tile], p: Player)(implicit NXT: Next[S, M]): \/[String, Board[NXT.NewS, NXT.NewM]] =
     Board.tryMoveAt(b)(e, p)
 
   def whoWon[S <: Status, M <: Moves](b: Board[S, M])(implicit W: WhoWon[S]): W.R =
