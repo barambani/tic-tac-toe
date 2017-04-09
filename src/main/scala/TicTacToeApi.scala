@@ -23,7 +23,7 @@ object TicTacToeApi {
     b.playerAt(t)
 
   def takeBack[S <: Status, M <: Moves](b: Board[S, M])(implicit PRV: Previous[S, M]): Board[PRV.NewS, PRV.NewM] =
-    Board.createPrev(b)
+    Board.takeBack(b)
 
   def isDraw(b: Board[Finished, Full]): Boolean = true
 

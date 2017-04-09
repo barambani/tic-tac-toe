@@ -115,7 +115,7 @@ object Algebra {
         case false  => -\/(s"${ a.t } already taken")
       }
 
-    def createPrev[S <: Status, M <: Moves](b: Board[S, M])(implicit PRV: Previous[S, M]): Board[PRV.NewS, PRV.NewM] = new Board[PRV.NewS, PRV.NewM] {
+    def takeBack[S <: Status, M <: Moves](b: Board[S, M])(implicit PRV: Previous[S, M]): Board[PRV.NewS, PRV.NewM] = new Board[PRV.NewS, PRV.NewM] {
       val s = PRV.s
       val m = PRV.m
       val es = b.es + Empty(b.h.head.t)
