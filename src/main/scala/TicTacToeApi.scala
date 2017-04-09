@@ -16,7 +16,7 @@ object TicTacToeApi {
   def move[S <: Status, M <: Moves](b: Board[S, M], e: Empty[Tile], p: Player)(implicit M: Move[S, M]): \/[String, Board[M.NewS, M.NewM]] =
     Board.tryMoveAt(b)(e, p)
 
-  def whoWon[S <: Status](b: Board[S, _])(implicit W: WhoWon[S]): W.R =
+  def whoWon[S <: Status, M <: Moves](b: Board[S, M])(implicit W: WhoWon[S]): W.R =
     W.whoWon(b)
 
   def playerAt[S <: Status, M <: Moves](b: Board[S, M], t: Tile): Option[Player] =

@@ -2,8 +2,8 @@ import Algebra._
 import scala.language.higherKinds
 
 sealed trait Previous[S <: Status, M <: Moves] { 
-  type NewS
-  type NewM
+  type NewS <: Status
+  type NewM <: Moves
 
   val s: NewS
   val m: NewM
@@ -15,7 +15,7 @@ object Previous {
 
   def apply[S <: Status, M <: Moves](implicit INST: Previous[S, M]): Aux[S, M, INST.NewS, INST.NewM] = INST
 
-  implicit lazy val previous1: Previous[InPlay, OneMove] = 
+  implicit lazy val previous1: Aux[InPlay, OneMove, NotStarted, NoMoves] = 
     new Previous[InPlay, OneMove] {
       type NewS = NotStarted
       type NewM = NoMoves
@@ -24,7 +24,7 @@ object Previous {
       val m = NoMoves
     }
 
-  implicit lazy val previous2: Previous[InPlay, TwoMoves] = 
+  implicit lazy val previous2: Aux[InPlay, TwoMoves, InPlay, OneMove] = 
     new Previous[InPlay, TwoMoves] {
       type NewS = InPlay
       type NewM = OneMove
@@ -33,7 +33,7 @@ object Previous {
       val m = OneMove
     }
  
-  implicit lazy val previous3: Previous[InPlay, ThreeMoves] = 
+  implicit lazy val previous3: Aux[InPlay, ThreeMoves, InPlay, TwoMoves] = 
     new Previous[InPlay, ThreeMoves] {
       type NewS = InPlay
       type NewM = TwoMoves
@@ -42,7 +42,7 @@ object Previous {
       val m = TwoMoves
     }
 
-  implicit lazy val previous4: Previous[InPlay, FourMoves] = 
+  implicit lazy val previous4: Aux[InPlay, FourMoves, InPlay, ThreeMoves] = 
     new Previous[InPlay, FourMoves] {
       type NewS = InPlay
       type NewM = ThreeMoves
@@ -51,7 +51,7 @@ object Previous {
       val m = ThreeMoves
     }
 
-  implicit lazy val previous5: Previous[MayBeFinished, FiveMoves] = 
+  implicit lazy val previous5: Aux[MayBeFinished, FiveMoves, InPlay, FourMoves] = 
     new Previous[MayBeFinished, FiveMoves] {
       type NewS = InPlay
       type NewM = FourMoves
@@ -60,7 +60,7 @@ object Previous {
       val m = FourMoves
     }
 
-  implicit lazy val previous6: Previous[MayBeFinished, SixMoves] = 
+  implicit lazy val previous6: Aux[MayBeFinished, SixMoves, MayBeFinished, FiveMoves] = 
     new Previous[MayBeFinished, SixMoves] {
       type NewS = MayBeFinished
       type NewM = FiveMoves
@@ -69,7 +69,7 @@ object Previous {
       val m = FiveMoves
     }
 
-  implicit lazy val previous7: Previous[MayBeFinished, SevenMoves] = 
+  implicit lazy val previous7: Aux[MayBeFinished, SevenMoves, MayBeFinished, SixMoves] = 
     new Previous[MayBeFinished, SevenMoves] {
       type NewS = MayBeFinished
       type NewM = SixMoves
@@ -78,7 +78,7 @@ object Previous {
       val m = SixMoves
     }
 
-  implicit lazy val previous8: Previous[MayBeFinished, EightMoves] = 
+  implicit lazy val previous8: Aux[MayBeFinished, EightMoves, MayBeFinished, SevenMoves] = 
     new Previous[MayBeFinished, EightMoves] {
       type NewS = MayBeFinished
       type NewM = SevenMoves
@@ -87,7 +87,7 @@ object Previous {
       val m = SevenMoves
     }
 
-  implicit lazy val previous9: Previous[Finished, Full] = 
+  implicit lazy val previous9: Aux[Finished, Full, MayBeFinished, EightMoves] = 
     new Previous[Finished, Full] {
       type NewS = MayBeFinished
       type NewM = EightMoves
