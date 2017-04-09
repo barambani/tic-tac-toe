@@ -73,7 +73,7 @@ m7: scalaz.\/[String,Algebra.Board[Next.move6.NewS,Next.move6.NewM]] =
 
 &nbsp;
 
-whoWon on possible case with winning player
+whoWon on possible scenario with winning player
 ```
 scala> m7 flatMap (whoWon(_))
 res6: scalaz.\/[java.io.Serializable,Algebra.Winner[Algebra.Player]] = \/-(Winner(X))
