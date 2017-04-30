@@ -29,8 +29,8 @@ object Algebra {
   sealed trait Player extends Product with Serializable
   sealed trait X extends Player
   sealed trait O extends Player
-  final case object X extends X { override def toString: String = "X" }
-  final case object O extends O { override def toString: String = "O" }
+  final case object X extends X 
+  final case object O extends O 
 
   
   sealed trait Tile extends Product with Serializable
@@ -73,7 +73,6 @@ object Algebra {
   sealed trait Board[S, M] {
     val s: S
     val m: M
-    val es: Set[Empty[Tile]]
     val h: List[Taken[Tile, Player]]
 
     def playerAt(t: Tile): Option[Player] =
@@ -92,34 +91,33 @@ object Algebra {
   
   object Board {
 
-    lazy val empty: Board[NotStarted, NoMoves] = new Board[NotStarted, NoMoves]{
-      val s   = NotStarted
-      val m   = NoMoves
-      val es  = Set(Tile11, Tile12, Tile13, Tile21, Tile22, Tile23, Tile31, Tile32, Tile33) map Empty.apply
-      val h   = Nil
-    }
+    lazy val empty: Board[NotStarted, NoMoves] =
+      new Board[NotStarted, NoMoves]{
+        val s   = NotStarted
+        val m   = NoMoves
+        val h   = Nil
+      }
 
     def tryMoveAt[S <: Status, M <: Moves](b: Board[S, M])(e: Empty[Tile], p: Player)(implicit NXT: Next[S, M]): \/[String, Board[NXT.NewS, NXT.NewM]] = 
-      takeIfAvailable(b.es, e) map {
-        newEmpty => new Board[NXT.NewS, NXT.NewM] {
+      takeIfAvailable(b.h, Taken(e.t, p)) map {
+        taken => new Board[NXT.NewS, NXT.NewM] {
             val s   = NXT.s
             val m   = NXT.m
-            val es  = newEmpty
-            val h   = Taken(e.t, p) :: b.h
+            val h   = taken :: b.h
         }
       }
 
-    private def takeIfAvailable[A](xs: Set[Empty[A]], a: Empty[A]): \/[String, Set[Empty[A]]] =
-      xs contains a match {
-        case true   => \/-(xs filterNot (_ == a))
-        case false  => -\/(s"${ a.t } already taken")
+    private def takeIfAvailable(hs: List[Taken[Tile, Player]], t: => Taken[Tile, Player]): \/[String, Taken[Tile, Player]] =
+      hs exists (_.t == t.t) match {
+        case false  => \/-(t)
+        case true   => -\/(s"${ t.t } already taken")
       }
 
-    def takeBack[S <: Status, M <: Moves](b: Board[S, M])(implicit PRV: Previous[S, M]): Board[PRV.NewS, PRV.NewM] = new Board[PRV.NewS, PRV.NewM] {
-      val s = PRV.s
-      val m = PRV.m
-      val es = b.es + Empty(b.h.head.t)
-      val h = b.h.tail
-    }
+    def takeBack[S <: Status, M <: Moves](b: Board[S, M])(implicit PRV: Previous[S, M]): Board[PRV.NewS, PRV.NewM] = 
+      new Board[PRV.NewS, PRV.NewM] {
+        val s = PRV.s
+        val m = PRV.m
+        val h = b.h.tail
+      }
   }
 }
