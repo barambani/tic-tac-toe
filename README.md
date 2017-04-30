@@ -1,7 +1,7 @@
 # Tic Tac Toe
 
 
-Scala solution of the Tic Tac Toe challenge proposed in the Tony Morris' fpcourse
+Possible Scala solution of the Tic Tac Toe challenge proposed in the Tony Morris' fpcourse
 
 https://github.com/data61/fp-course/blob/master/projects/TicTacToe/TicTacToe.markdown
 
