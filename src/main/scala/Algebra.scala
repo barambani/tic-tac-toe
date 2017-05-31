@@ -88,9 +88,9 @@ object Algebra {
       implicit 
         NXT: Next.Aux[S, M, S1, M1], 
         SS: Show[S1],
-        SM: Show[M1]): \/[String, Board[NXT.NewS, NXT.NewM]] = 
+        SM: Show[M1]): \/[String, Board[S1, M1]] = 
           takeIfAvailable(b.h, Taken(e.t, p)) map {
-            taken => new Board[NXT.NewS, NXT.NewM] { val h = taken :: b.h }
+            taken => new Board[S1, M1] { val h = taken :: b.h }
           }
 
     private def takeIfAvailable(hs: List[Taken[Tile, Player]], t: => Taken[Tile, Player]): \/[String, Taken[Tile, Player]] =
@@ -103,7 +103,7 @@ object Algebra {
       implicit 
         PRV: Previous.Aux[S, M, S1, M1],
         SS: Show[S1],
-        SM: Show[M1]): Board[PRV.NewS, PRV.NewM] = 
+        SM: Show[M1]): Board[S1, M1] = 
           new Board[S1, M1] { val h = b.h.tail }
   }
 }
