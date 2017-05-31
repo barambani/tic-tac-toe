@@ -12,6 +12,10 @@ initialCommands := """
 scalacOptions ++= Seq (
   "-feature",
   "-deprecation",
+  "-language:higherKinds",
+  "-language:implicitConversions",
+  "-Xfatal-warnings",
+  "-unchecked",
   "-target:jvm-1.8"
 )
 
