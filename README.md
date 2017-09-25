@@ -9,88 +9,88 @@ https://github.com/data61/fp-course/blob/master/projects/TicTacToe/TicTacToe.mar
 
 start a new game
 ```
-scala> val init = startGame
-init: Algebra.Board[Algebra.NotStarted,Algebra.NoMoves] =
+scala> val board_0 = startGame
+board_0: Algebra.Board[Algebra.NotStarted,Algebra.NoMoves] =
 
       _  _  _
       _  _  _
       _  _  _
 
-      Status: NotStarted with NoMoves
+      Status: not started with no moves
  ```
 
 &nbsp;
 
 first move:
 ```
-scala> val m1 = nextMoveFor(init)(Tile22, X)
-m1: scalaz.\/[String,Algebra.Board[Next.move0.NewS,Next.move0.NewM]] =
+scala> val board_1 = board_0.afterMove(Tile22, X)
+board_1: scalaz.\/[String,Algebra.Board[Next.noMoves.NewS,Next.noMoves.NewM]] =
 \/-(
       _  _  _
       _  X  _
       _  _  _
 
-      Status: InPlay with OneMove)
+      Status: in play with one move)
 ```
 
 &nbsp;
 
 second move:
 ```
-scala> val m2 = nextMoveFor(m1)(Tile23, O)
-m2: scalaz.\/[String,Algebra.Board[Next.move1.NewS,Next.move1.NewM]] =
+scala> val board_2 = board_1.afterMove(Tile23, O)
+board_2: scalaz.\/[String,Algebra.Board[Next.oneMove.NewS,Next.oneMove.NewM]] =
 \/-(
       _  _  _
       _  X  O
       _  _  _
 
-      Status: InPlay with TwoMoves)
+      Status: in play with two moves)
 ```
 
 &nbsp;
 
 whoWon for impossible scenario:
 ```
-scala> m2 flatMap (whoWon(_))
-<console>:19: error: could not find implicit value for parameter W: WhoWon[Next.move1.NewS]
-       m2 flatMap (whoWon(_))
-                         ^
+scala> board_2 flatMap (whoWon(_))
+<console>:19: error: could not find implicit value for parameter W: WhoWon[Next.oneMove.NewS]
+       board_2 flatMap (whoWon(_))
+                              ^
 ```
 
 &nbsp;
 
 winning move:
 ```
-scala> val m7 = nextMoveFor(m6)(Tile12, X)
-m7: scalaz.\/[String,Algebra.Board[Next.move6.NewS,Next.move6.NewM]] =
+scala> val board_7 = board_6.afterMove(Tile32, X)
+m7: scalaz.\/[String,Algebra.Board[Next.sixMoves.NewS,Next.sixMoves.NewM]] =
 \/-(
       O  X  _
       _  X  O
       O  X  X
 
-      Status: MayBeFinished with SevenMoves)
+      Status: may be finished with seven moves)
 ```
 
 &nbsp;
 
 whoWon on possible scenario with winning player
 ```
-scala> m7 flatMap (whoWon(_))
-res6: scalaz.\/[java.io.Serializable,Algebra.Winner[Algebra.Player]] = \/-(Winner(X))
+scala> board_7 flatMap (whoWon(_))
+res1: scalaz.\/[java.io.Serializable,Algebra.Winner[Algebra.Player]] = \/-(Winner(X))
 ```
 
 &nbsp;
 
 take back on the board with 7 moves
 ```
-scala> m7 map (takeBack(_))
-res11: scalaz.\/[String,Algebra.Board[Previous.previous7.NewS,Previous.previous7.NewM]] =
+scala> board_7 map (takeBack(_))
+res2: scalaz.\/[String,Algebra.Board[Previous.previous7.NewS,Previous.previous7.NewM]] =
 \/-(
-      O  _  _
+      O  X  _
       _  X  O
-      O  X  X
+      O  _  X
 
-      Status: MayBeFinished with SixMoves)
+      Status: may be finished with six moves)
 ```
 
 
