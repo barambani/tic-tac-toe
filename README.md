@@ -3,8 +3,7 @@
 
 Possible Scala solution of the Tic Tac Toe challenge proposed in the [Tony Morris' fpcourse](https://github.com/data61/fp-course/blob/master/projects/TicTacToe/TicTacToe.markdown)
 
-&nbsp;
-
+### Api Example
 start a new game
 ```
 scala> val board_0 = startGame
