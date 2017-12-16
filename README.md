@@ -48,10 +48,10 @@ board_2: scalaz.\/[String,Algebra.Board[Next.oneMove.NewS,Next.oneMove.NewM]] =
 
 whoWon for impossible scenario:
 ```
-scala> board_2 flatMap (whoWon(_))
-<console>:19: error: could not find implicit value for parameter W: WhoWon[Next.oneMove.NewS]
-       board_2 flatMap (whoWon(_))
-                              ^
+scala> board_2.whoWon
+<console>:22: error: could not find implicit value for parameter W: WhoWon[Next.oneMove.NewS]
+       board_2.whoWon
+               ^
 ```
 
 &nbsp;
@@ -72,20 +72,20 @@ m7: scalaz.\/[String,Algebra.Board[Next.sixMoves.NewS,Next.sixMoves.NewM]] =
 
 whoWon on possible scenario with winning player
 ```
-scala> board_7 flatMap (whoWon(_))
-res1: scalaz.\/[java.io.Serializable,Algebra.Winner[Algebra.Player]] = \/-(Winner(X))
+scala> board_7.whoWon
+res1: scalaz.\/[String,WhoWon.whoWon5.R] = \/-(\/-(Winner(X)))
 ```
 
 &nbsp;
 
 take back on the board with 7 moves
 ```
-scala> board_7 map (takeBack(_))
+scala> board_7.takeBack
 res2: scalaz.\/[String,Algebra.Board[Previous.previous7.NewS,Previous.previous7.NewM]] =
 \/-(
       O  X  _
       _  X  O
-      O  _  X
+      O  _  O
 
       Status: may be finished with six moves)
 ```
