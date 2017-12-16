@@ -11,21 +11,21 @@ object TicTacToeApi {
       NXT: Next.Aux[S, M, S1, M1],
       SS: Show[S1],
       SM: Show[M1]): \/[String, Board[S1, M1]] =
-        move(b, Empty(t), p)
+    move(b, Empty(t), p)
 
   def nextMoveFor[S <: Status, M <: Move, S1 <: Status, M1 <: Move](b: \/[String, Board[S, M]])(t: Tile, p: Player)(
     implicit 
       NXT: Next.Aux[S, M, S1, M1],
       SS: Show[S1],
       SM: Show[M1]): \/[String, Board[S1, M1]] =
-        b flatMap (move(_, Empty(t), p))
+    b flatMap (move(_, Empty(t), p))
 
   def move[S <: Status, M <: Move, S1 <: Status, M1 <: Move](b: Board[S, M], e: Empty[Tile], p: Player)(
     implicit 
       NXT: Next.Aux[S, M, S1, M1],
       SS: Show[S1],
       SM: Show[M1]): \/[String, Board[S1, M1]] =
-        Board.tryMoveAt(b)(e, p)
+    Board.tryMoveAt(b)(e, p)
 
   def whoWon[S <: Status, M <: Move](b: Board[S, M])(implicit W: WhoWon[S]): W.R =
     W.whoWon(b)
@@ -38,7 +38,7 @@ object TicTacToeApi {
       PRV: Previous.Aux[S, M, S1, M1],
       SS: Show[S1],
       SM: Show[M1]): Board[S1, M1] =
-        Board.takeBack(b)
+    Board.takeBack(b)
 
   def isDraw(b: Board[Finished, Full]): Boolean = true
 }
