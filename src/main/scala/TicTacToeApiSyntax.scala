@@ -1,5 +1,4 @@
 import Algebra._
-import TicTacToeApi._
 import scalaz.{\/, \/-}
 
 object TicTacToeApiSyntax {
@@ -47,8 +46,8 @@ object TicTacToeApiSyntax {
       b flatMap { r => \/-(TicTacToeApi.whoWon(r)) }
   }
 
-  implicit final class TicTacToeApiSyntax3(fullBoard: Board[Finished, Full]) {
-    def isDraw: Boolean = 
-      TicTacToeApi.isDraw(fullBoard)
+  implicit final class TicTacToeApiSyntax3(fullBoard: \/[String, Board[Finished, Full]]) {
+    def isDraw: \/[String, Boolean] = 
+      fullBoard map TicTacToeApi.isDraw
   }
 }

@@ -1,5 +1,4 @@
 import Algebra._
-import scalaz.{\/, -\/, \/-}
 
 sealed trait Next[S <: Status, M <: Move] {
   type NewS <: Status

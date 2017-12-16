@@ -1,5 +1,5 @@
 import Algebra._
-import scalaz.{\/, -\/, \/-}
+import scalaz.\/
 
 object TicTacToeApi {
 
