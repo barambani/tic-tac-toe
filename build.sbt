@@ -1,18 +1,27 @@
-inThisBuild(Seq(
-  scalaOrganization   :=  "org.typelevel",
-  scalaVersion        :=  "2.12.4-bin-typelevel-4",
-  libraryDependencies ++= Seq("org.scalaz" %% "scalaz-core" % "7.2.17")
-))
+val typelevelOrganization = "org.typelevel"
+val scala_typelevel_212   = "2.12.4-bin-typelevel-4"
 
-lazy val prjcSettings = Seq (
-  version := "1.0.0",
-  name 	  := "tic-tac-toe"
-)
+val root = project
+  .in(file("."))
+  .settings(
+    version 	              :=  "1.0.0",
+    name 	                  :=  "tic-tac-toe",
+    scalaOrganization       :=  typelevelOrganization,
+    scalaVersion            :=  scala_typelevel_212,
+    libraryDependencies     ++= Seq("org.scalaz" %% "scalaz-core" % "7.2.17"),
+    scalacOptions           ++= generalOptions ++ typeLevelScalaOptions,
+    scalacOptions in Test   ++= testOnlyOptions,
+    scalacOptions in (Compile, console) --= nonTestExceptions,
+    resolvers               +=  Resolver.sonatypeRepo("releases"),
+    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4"),
+    initialCommands         := """
+                                import TicTacToeApi._
+                                import TicTacToeApiSyntax._
+                                import Algebra._
+                               """
+  )
 
-lazy val `tic-tac-toe` = 
-  (project in file(".")).settings(prjcSettings: _*)
-
-scalacOptions ++= Seq (
+lazy val generalOptions = Seq (
   "-deprecation",                      // Emit warning and location for usages of deprecated APIs.
   "-encoding", "utf-8",                // Specify character encoding used by source files.
   "-explaintypes",                     // Explain type errors in more detail.
@@ -58,7 +67,7 @@ scalacOptions ++= Seq (
   "-Ywarn-value-discard"               // Warn when non-Unit expression results are unused.
 )
 
-scalacOptions ++= Seq (
+lazy val typeLevelScalaOptions = Seq (
   "-Yinduction-heuristics",       // speeds up the compilation of inductive implicit resolution
   "-Ykind-polymorphism",          // type and method definitions with type parameters of arbitrary kinds
   "-Yliteral-types",              // literals can appear in type position
@@ -66,23 +75,10 @@ scalacOptions ++= Seq (
   "-Xlint:strict-unsealed-patmat" // warn on inexhaustive matches against unsealed traits
 )
 
-scalacOptions in (Compile, console) --= Seq (
+lazy val nonTestExceptions = Seq (
   "-Ywarn-unused:imports",
   "-Xfatal-warnings",
   "-target:jvm-1.8"
 )
 
-scalacOptions in Test ++= Seq("-Yrangepos")
-
-scalacOptions in (Test) ++= Seq (
-  "-P:splain:implicits:true",
-  "-P:splain:tree:true"
-)
-
-logLevel := Level.Info
-
-initialCommands := """
-  import TicTacToeApi._
-  import TicTacToeApiSyntax._
-  import Algebra._
-"""
+lazy val testOnlyOptions = Seq("-Yrangepos")
