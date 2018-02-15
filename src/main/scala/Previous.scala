@@ -1,6 +1,6 @@
 import Algebra._
 
-sealed trait Previous[S <: Status, M <: Move] { 
+sealed trait Previous[S <: Status, M <: Move] {
   type NewS <: Status
   type NewM <: Move
 }

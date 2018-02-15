@@ -2,10 +2,10 @@ import scalaz.{\/, -\/, \/-}
 
 object Algebra {
 
-  sealed trait Move extends Product with Serializable
-  sealed trait NoMoves extends Move
-  final case object NoMoves extends NoMoves
-  final case class Succ[M <: Move](m: M) extends Move
+  sealed trait Move
+  final case object NoMoves extends Move
+  type NoMoves = NoMoves.type
+  sealed trait Succ[M <: Move] extends Move
 
   type OneMove    = Succ[NoMoves]
   type TwoMoves   = Succ[OneMove]
@@ -16,6 +16,7 @@ object Algebra {
   type SevenMoves = Succ[SixMoves]
   type EightMoves = Succ[SevenMoves]
   type Full       = Succ[EightMoves]
+
 
   sealed trait Player extends Product with Serializable
   sealed trait X extends Player
@@ -93,17 +94,17 @@ object Algebra {
         taken => new Board[S1, M1] { val h = taken :: b.h }
       }
 
-    private def takeIfAvailable(hs: List[Taken[Tile, Player]], t: => Taken[Tile, Player]): \/[String, Taken[Tile, Player]] =
-      hs exists (_.t == t.t) match {
-        case false  => \/-(t)
-        case true   => -\/(s"${ t.t } already taken")
-      }
-
     def takeBack[S <: Status, M <: Move, S1 <: Status, M1 <: Move](b: Board[S, M])(
       implicit 
         PRV: Previous.Aux[S, M, S1, M1],
         SS: Show[S1],
         SM: Show[M1]): Board[S1, M1] = 
       new Board[S1, M1] { val h = b.h.tail }
+
+    private def takeIfAvailable(hs: List[Taken[Tile, Player]], t: => Taken[Tile, Player]): \/[String, Taken[Tile, Player]] =
+      hs exists (_.t == t.t) match {
+        case false  => \/-(t)
+        case true   => -\/(s"${ t.t } already taken")
+      }
   }
 }
