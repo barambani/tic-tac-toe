@@ -19,10 +19,10 @@ object Algebra {
 
 
   sealed trait Player extends Product with Serializable
-  sealed trait X extends Player
-  sealed trait O extends Player
-  final case object X extends X 
-  final case object O extends O 
+  final case object X extends Player
+  final case object O extends Player
+  type X = X.type
+  type O = O.type
 
   
   sealed trait Tile extends Product with Serializable
@@ -41,25 +41,24 @@ object Algebra {
   final case class Empty[A](t: A) extends Position[A]
   final case class Taken[A, P](t: A, p: P) extends Position[A]
 
-  
-  final case class Winner[A](p: A)
-  
-  sealed trait PlayAgain extends Product with Serializable
-  final case object PlayAgain extends PlayAgain
 
-  sealed trait Draw extends Product with Serializable
-  final case object Draw extends Draw
+  sealed trait Outcome extends Product with Serializable
+  final case class  Winner[A](p: A) extends Outcome
+  final case object Draw            extends Outcome
+  final case object PlayAgain       extends Outcome
+  type PlayAgain  = PlayAgain.type
+  type Draw       = Draw.type
 
   
   sealed trait Status extends Product with Serializable
-  sealed trait NotStarted extends Status
-  sealed trait InPlay extends Status
-  sealed trait MayBeFinished extends Status
-  sealed trait Finished extends Status
-  final case object NotStarted    extends NotStarted
-  final case object InPlay        extends InPlay
-  final case object MayBeFinished extends MayBeFinished
-  final case object Finished      extends Finished
+  final case object NotStarted    extends Status
+  final case object InPlay        extends Status
+  final case object MayBeFinished extends Status
+  final case object Finished      extends Status
+  type NotStarted     = NotStarted.type
+  type InPlay         = InPlay.type
+  type MayBeFinished  = MayBeFinished.type
+  type Finished       = Finished.type
 
 
   sealed abstract class Board[S, M](implicit SS: Show[S], SM: Show[M]) {
